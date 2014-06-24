@@ -1,5 +1,6 @@
 package net.p_lucky.logbk.android.sample;
 
+import net.p_lucky.logbk.android.lbmetrics.LogbookAPI;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.ActionBarActivity;
@@ -10,6 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 public class MainActivity extends ActionBarActivity {
+	private LogbookAPI api;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -21,8 +23,14 @@ public class MainActivity extends ActionBarActivity {
                     .add(R.id.container, new PlaceholderFragment())
                     .commit();
         }
+    	api = MyApplication.getLogbookAPI();
     }
 
+    @Override
+    protected void onDestroy() {
+        api.flush();
+        super.onDestroy();
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -61,16 +69,21 @@ public class MainActivity extends ActionBarActivity {
     }
 
     public void onClick(View view) {
-        switch (view.getId()) {
+    	switch (view.getId()) {
             case R.id.acquisition_button:
+            	api.trackAcquisition();
                 break;
             case R.id.activation_button:
+            	api.trackActivation();
                 break;
             case R.id.retention_button:
+            	api.trackRetention();
                 break;
             case R.id.referral_button:
+            	api.trackReferral();
                 break;
             case R.id.revenue_button:
+            	api.trackRevenue();
                 break;
             default:
                 break;
